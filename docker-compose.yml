@@ -1,0 +1,33 @@
+version: '1.0'
+services:
+  backend:
+    build: ./backend
+    container_name: backend-devops
+    ports:
+      - 8080:8080
+    depends_on:
+      - database
+    networks:
+      - netapp
+  database:
+    build: ./database
+    container_name: db-devops
+    volumes:
+      - ./database/data:/var/lib/postgresql/data
+      - ./database/backup:/var/lib/postgresql/backup
+    ports:
+      - 5433:5432
+    networks:
+      - netapp
+  httpd:
+    build: ./frontend
+    container_name: httpd-devops
+    ports:
+      - 80:80
+    networks:
+      - netapp
+    depends_on:
+      - backend
+      
+networks:
+    netapp:
