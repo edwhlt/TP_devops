@@ -3,9 +3,8 @@ name: CI devops 2023
 on:
   push:
     branches:
-      - master
-  pull_request:
-
+      - develop
+      
 jobs:
   test-backend:
     runs-on: ubuntu-22.04
