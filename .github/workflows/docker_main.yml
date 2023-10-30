@@ -1,7 +1,6 @@
 name: CI devops docker 2023
 
 on:
-  pull_request:
   push:
     branches:
       - master
