@@ -39,17 +39,17 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ./backend
-          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-devops/backend
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/TP_devops/backend
     
       - name: Build image and push database
         uses: docker/build-push-action@v3
         with:
           context: ./database # Mettez ici le chemin relatif vers le répertoire de votre base de données
-          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-devops/database
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/TP_devops/database
     
     
       - name: Build image and push httpd
         uses: docker/build-push-action@v3
         with:
           context: ./frontend # Mettez ici le chemin relatif vers le répertoire de votre serveur HTTP
-          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-devops/frontend
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/TP_devops/frontend
