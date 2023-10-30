@@ -33,37 +33,31 @@ jobs:
    # steps to perform in job
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2.5.0
+        uses: actions/checkout@v2.5.0*
+        
+      - name: Login to DockerHub
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
     
       - name: Build image and push backend
         uses: docker/build-push-action@v3
         with:
           context: ./backend
-          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp_devops/backend
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp_devops:backend
+          push: ${{ github.ref == 'refs/heads/master' }}
     
       - name: Build image and push database
         uses: docker/build-push-action@v3
         with:
           context: ./database # Mettez ici le chemin relatif vers le répertoire de votre base de données
-          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp_devops/database
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp_devops:database
+          push: ${{ github.ref == 'refs/heads/master' }}
     
     
       - name: Build image and push httpd
         uses: docker/build-push-action@v3
         with:
           context: ./frontend # Mettez ici le chemin relatif vers le répertoire de votre serveur HTTP
-          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp_devops/frontend
-
-      - name: Login to DockerHub
-        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Push image to docker hub
-        uses: docker/build-push-action@v3
-        with:
-          # relative path to the place where source code with Dockerfile is located
-          context: ./backend
-          # Note: tags has to be all lower-case
-          tags:  ${{secrets.DOCKERHUB_USERNAME}}/tp_devops/backend
-          # build on feature branches, push only on main branch
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp_devops:frontend
           push: ${{ github.ref == 'refs/heads/master' }}
+
 
