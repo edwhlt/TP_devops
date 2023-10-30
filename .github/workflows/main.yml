@@ -53,3 +53,16 @@ jobs:
         with:
           context: ./frontend # Mettez ici le chemin relatif vers le répertoire de votre serveur HTTP
           tags: ${{secrets.DOCKERHUB_USERNAME}}/tp_devops/frontend
+
+      - name: Login to DockerHub
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build image and push backend
+        uses: docker/build-push-action@v3
+        with:
+          # relative path to the place where source code with Dockerfile is located
+          context: ./backend
+          # Note: tags has to be all lower-case
+          tags:  ${{secrets.DOCKERHUB_USERNAME}}/tp_devops/backend
+          # build on feature branches, push only on main branch
+          push: ${{ github.ref == 'refs/heads/main' }}
