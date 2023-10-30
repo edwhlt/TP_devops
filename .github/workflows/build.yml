@@ -1,4 +1,4 @@
-name: CI devops docker 2023
+name: Build
 
 on:
   push:
