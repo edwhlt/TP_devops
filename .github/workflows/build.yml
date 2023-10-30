@@ -1,9 +1,6 @@
 name: Build
 
 on:
-  push:
-    branches:
-      - master
   workflow_run:
     workflows: ["CI devops 2023"]
     branches: [master]
@@ -28,14 +25,14 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ./backend
-          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp_devops:backend
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp_devops-backend:latest
           push: ${{ github.ref == 'refs/heads/master' }}
     
       - name: Build image and push database
         uses: docker/build-push-action@v3
         with:
           context: ./database # Mettez ici le chemin relatif vers le répertoire de votre base de données
-          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp_devops:database
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp_devops-database:latest
           push: ${{ github.ref == 'refs/heads/master' }}
     
     
@@ -43,5 +40,5 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ./frontend # Mettez ici le chemin relatif vers le répertoire de votre serveur HTTP
-          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp_devops:frontend
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp_devops-frontend:latest
           push: ${{ github.ref == 'refs/heads/master' }}
