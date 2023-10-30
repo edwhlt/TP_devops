@@ -18,6 +18,7 @@ jobs:
         uses: actions/setup-java@v2 # Assurez-vous que la version de setup-java est correcte
         with:
           java-version: 17 # Spécifiez la version de Java que vous souhaitez
+          distribution: 'adopt'
 
       - name: Build and test with Maven
         run: mvn clean verify -DskipTests --file backend/pom.xml
