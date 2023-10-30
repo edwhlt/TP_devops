@@ -18,4 +18,4 @@ jobs:
 
      #finally build your app with the latest command
       - name: Build and test with Maven
-        run: #TODO
+        run: mvn clean verify -DskipTests --file /backend/pom.xml
