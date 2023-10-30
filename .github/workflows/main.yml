@@ -72,5 +72,5 @@ jobs:
 
     steps:
       - name: SonarCloud
-        run: mvn -B verify sonar:sonar -Dsonar.projectKey=TP_devops -Dsonar.organization=edwhlt -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }}  --file ./backend/pom.xml
+        run: mvn -B verify sonar:sonar -Dsonar.projectKey=TP_devops -Dsonar.organization=edwhlt -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }}  --file ./pom.xml
 
