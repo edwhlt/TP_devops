@@ -66,3 +66,7 @@ jobs:
           tags:  ${{secrets.DOCKERHUB_USERNAME}}/tp_devops/backend
           # build on feature branches, push only on main branch
           push: ${{ github.ref == 'refs/heads/main' }}
+
+      - name: SonarCloud
+        run: mvn -B verify sonar:sonar -Dsonar.projectKey=devops-2023 -Dsonar.organization=devops-school -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }}  --file ./backend/pom.xml
+
