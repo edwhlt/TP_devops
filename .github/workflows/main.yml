@@ -49,6 +49,7 @@ jobs:
     
     
       - name: Build image and push httpd
+        uses: docker/build-push-action@v3
         with:
           context: ./frontend # Mettez ici le chemin relatif vers le répertoire de votre serveur HTTP
           tags: ${{secrets.DOCKERHUB_USERNAME}}/tp-devops/frontend
