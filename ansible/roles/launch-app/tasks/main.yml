@@ -10,4 +10,6 @@
     networks:
       - name: netapp
     state: started
+    recreate: yes
+    pull: true
   become: yes
