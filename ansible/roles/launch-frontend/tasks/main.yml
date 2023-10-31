@@ -1,0 +1,12 @@
+---
+# tasks file for roles/launch-frontend
+- name: Launch frontend container
+  docker_container:
+    name: frontend-devops
+    image: edwhlt/tp_devops-frontend:latest
+    ports:
+      - "800:80"
+    networks:
+      - name: netapp
+    state: started
+  become: yes
