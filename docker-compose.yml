@@ -19,15 +19,24 @@ services:
       - 5433:5432
     networks:
       - netapp
+  frontend:
+    build: ./devops-front
+    container_name: frontend-devops
+    ports:
+      - 800:80
+    networks:
+      - netapp
+    depends_on:
+      - backend
   httpd:
-    build: ./frontend
+    build: ./httpd
     container_name: httpd-devops
     ports:
       - 80:80
     networks:
       - netapp
     depends_on:
-      - backend
+      - frontend
       
 networks:
     netapp:
