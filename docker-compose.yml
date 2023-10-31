@@ -1,7 +1,8 @@
 version: '1.0'
 services:
   backend:
-    build: ./backend
+    # build: ./backend
+    image: edwhlt/tp_devops-backend:latest
     container_name: backend-devops
     ports:
       - 8080:8080
@@ -10,7 +11,8 @@ services:
     networks:
       - netapp
   database:
-    build: ./database
+    # build: ./database
+    image: edwhlt/tp_devops-database:latest
     container_name: db-devops
     volumes:
       - ./database/data:/var/lib/postgresql/data
@@ -20,7 +22,8 @@ services:
     networks:
       - netapp
   frontend:
-    build: ./devops-front
+    # build: ./devops-front
+    image: edwhlt/tp_devops-frontend:latest
     container_name: frontend-devops
     ports:
       - 800:80
@@ -29,7 +32,8 @@ services:
     depends_on:
       - backend
   httpd:
-    build: ./httpd
+    # build: ./httpd
+    image: edwhlt/tp_devops-httpd:latest
     container_name: httpd-devops
     ports:
       - 80:80
