@@ -7,4 +7,5 @@
     - create-docker-network
     - launch-database
     - launch-app
+    - launch-frontend
     - launch-proxy

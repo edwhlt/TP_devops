@@ -3,7 +3,7 @@
 - name: Launch proxy container
   docker_container:
     name: httpd-devops
-    image: edwhlt/tp_devops-frontend:latest
+    image: edwhlt/tp_devops-httpd:latest
     ports:
       - "80:80"
     networks:
