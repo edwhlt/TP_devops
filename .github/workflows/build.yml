@@ -35,10 +35,16 @@ jobs:
           tags: ${{secrets.DOCKERHUB_USERNAME}}/tp_devops-database:latest
           push: ${{ github.ref == 'refs/heads/master' }}
     
+      - name: Build image and push frontend
+        uses: docker/build-push-action@v3
+        with:
+          context: ./devops-front # Mettez ici le chemin relatif vers le répertoire de votre serveur HTTP
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp_devops-frontend:latest
+          push: ${{ github.ref == 'refs/heads/master' }}
     
       - name: Build image and push httpd
         uses: docker/build-push-action@v3
         with:
-          context: ./frontend # Mettez ici le chemin relatif vers le répertoire de votre serveur HTTP
-          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp_devops-frontend:latest
+          context: ./httpd # Mettez ici le chemin relatif vers le répertoire de votre serveur HTTP
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/tp_devops-httpd:latest
           push: ${{ github.ref == 'refs/heads/master' }}
