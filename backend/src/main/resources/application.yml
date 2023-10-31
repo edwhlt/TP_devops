@@ -15,6 +15,8 @@ spring:
 management:
  server:
    add-application-context-header: false
+   servlet:
+      base-path: /api
  endpoints:
    web:
      exposure:
