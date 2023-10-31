@@ -1,0 +1,12 @@
+# tasks file for roles/launch-proxy
+---
+- name: Launch proxy container
+  docker_container:
+    name: httpd-devops
+    image: edwhlt/tp_devops-frontend:latest
+    ports:
+      - "80:80"
+    networks:
+      - name: netapp
+    state: started
+  become: yes

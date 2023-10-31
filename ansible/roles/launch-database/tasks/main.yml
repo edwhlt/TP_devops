@@ -1,0 +1,15 @@
+# tasks file for roles/launch-database
+---
+- name: Launch database container
+  docker_container:
+    name: db-devops
+    image: edwhlt/tp_devops-database:latest
+    volumes:
+      - /database/data:/var/lib/postgresql/data
+      - /database/backup:/var/lib/postgresql/backup
+    ports:
+      - "5433:5432"
+    networks:
+      - name: netapp
+    state: started
+  become: yes

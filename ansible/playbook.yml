@@ -1,0 +1,10 @@
+- name: Launch docker conteners
+  hosts: all
+  gather_facts: false
+  become: true
+  roles:
+    - install-docker
+    - create-docker-network
+    - launch-database
+    - launch-app
+    - launch-proxy

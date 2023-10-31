@@ -1,0 +1,13 @@
+
+# tasks file for roles/launch-app
+---
+- name: Launch app container
+  docker_container:
+    name: backend-devops
+    image: edwhlt/tp_devops-backend:latest
+    ports:
+      - "8080:8080"
+    networks:
+      - name: netapp
+    state: started
+  become: yes
