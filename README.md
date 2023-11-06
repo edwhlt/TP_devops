@@ -74,11 +74,11 @@ d'autres utilisateurs ou membres de l'équipe directement en ligne.
 
 # TP2 - Github Actions
 
-## What are testcontainers?
+## 2-1 What are testcontainers?
 
 Testcontainers est une bibliothèque Java qui permet d'exécuter des conteneurs Docker pendant les tests. Dans cet exemple, nous utilisons le conteneur PostgreSQL pour attacher notre application lors des tests. Lorsque vous exécutez la commande "mvn clean verify", un conteneur Docker est lancé pendant l'exécution des tests, ce qui est très pratique pour effectuer des tests d'intégration.
 
-## Document your Github Actions configurations.
+## 2-2 Document your Github Actions configurations.
 
 ```
 name: CI devops 2023
@@ -110,7 +110,7 @@ jobs:
         # Cette étape exécute la construction et les tests en utilisant Maven
 ```
 
-## Document your quality gate configuration.
+## 2-3 Document your quality gate configuration.
 
 On change la dernière étape du jobs test-backend
 ```
@@ -121,7 +121,7 @@ run: mvn -B verify sonar:sonar -Dsonar.projectKey=edwhlt_TP_devops -Dsonar.organ
 
 # TP 3 - Ansible
 
-## Document your inventory and base commands
+## 3-1 Document your inventory and base commands
 
 ```
 all:  # Groupe "all" contenant des variables globales et des groupes d'hôtes.
@@ -133,7 +133,7 @@ all:  # Groupe "all" contenant des variables globales et des groupes d'hôtes.
      hosts: edwin.helet.takima.cloud  # Liste des hôtes dans le groupe "prod".
 ```
 
-## Document your playbook
+## 3-2 Document your playbook
 
 ```
 - name: Launch Docker containers  # Nom du playbook, qui décrit son objectif.
@@ -189,7 +189,9 @@ Ensuite toutes les tasks sont définits dans les différents roles, par exemple 
   # Associe la balise (tag) 'docker' à cette tâche pour permettre son exécution sélective en fonction des balises utilisées lors de l'exécution du playbook.
 ```
 
-## Document your docker_container tasks configuration
+## 3-3 Document your docker_container tasks configuration
+
+Exemple de docker_container tasks, le backend:
 
 ```
 - name: Launch app container
