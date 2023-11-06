@@ -1,4 +1,4 @@
-# TP Questions - HELET Edwin
+# TP1 Questions - HELET Edwin
 
 
 ## 1-1 Document your database container essentials: commands and Dockerfile:
@@ -72,3 +72,29 @@ en automatisant la création, la configuration et la liaison des conteneurs. C'e
 Placer des images de conteneur dans Docker Hub,
 permet de les partager, de les distribuer et de les rendre accessibles à
 d'autres utilisateurs ou membres de l'équipe directement en ligne.
+
+# TP2 - Github Actions
+
+## What is GitHub Actions?
+
+estcontainers est une bibliothèque Java qui permet d'exécuter des conteneurs Docker pendant les tests. Dans cet exemple, nous utilisons le conteneur PostgreSQL pour attacher notre application lors des tests. Lorsque vous exécutez la commande "mvn clean verify", un conteneur Docker est lancé pendant l'exécution des tests, ce qui est très pratique pour effectuer des tests d'intégration.
+
+## What are testcontainers?
+
+Testcontainers est une bibliothèque Java qui permet d'exécuter des conteneurs Docker pendant les tests. Dans cet exemple, nous utilisons le conteneur PostgreSQL pour attacher notre application lors des tests. Lorsque vous exécutez la commande "mvn clean verify", un conteneur Docker est lancé pendant l'exécution des tests, ce qui est très pratique pour effectuer des tests d'intégration.
+
+## What is the purpose of Continuous Delivery (CD) in the context of software development?
+
+Continuous Delivery (CD) is a software development practice that focuses on automatically delivering code changes to production or a staging environment after they have been thoroughly tested. The goal of CD is to ensure that code can be reliably and consistently deployed to production with minimal manual intervention. It helps streamline the release process and improve software quality.
+
+## How do you secure environment variables in GitHub Actions?
+
+To secure environment variables in GitHub Actions, you can use GitHub Secrets. Secrets are encrypted variables that you can store in your GitHub repository. They are not exposed in the workflow logs, making them a secure way to store sensitive information like API keys or credentials.
+
+## How do you build and push Docker images using GitHub Actions?
+
+You can build and push Docker images in GitHub Actions by defining a job that uses a Docker action. In the job configuration, specify the Dockerfile and context for your Docker image, and provide the necessary credentials to log in to a container registry (e.g., Docker Hub). After building the image, you can use the action to push it to the container registry.
+
+# TP 3 - Ansible
+
+
