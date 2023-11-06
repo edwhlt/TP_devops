@@ -1,5 +1,4 @@
-# TP1 Questions - HELET Edwin
-
+# TP1 - Docker
 
 ## 1-1 Document your database container essentials: commands and Dockerfile:
 
@@ -46,28 +45,28 @@ Connexion a Docker Hub avec `docker login`
 Ensuite on doit préciser un tag pour pouvoir push ensuite `docker tag my-database <USERNAME>/my-database:1.0`
 Enfin on push avec la commande `docker push <USERNAME>/my-database:1.0`
 
-# Tips questions
+## Tips questions
 
-## Why should we run the container with a flag -e to give the environment variables?
+### Why should we run the container with a flag -e to give the environment variables?
 
 Utiliser le drapeau -e permet de définir ces variables lors de l'exécution du conteneur.
 Cela permet de personnaliser le comportement de l'application sans avoir à modifier son image.
 
-## Why do we need a volume to be attached to our postgres container?
+### Why do we need a volume to be attached to our postgres container?
 
 Il est important de conserver les données de la base de données de manière persistante, même si le conteneur est arrêté ou supprimé.
 En attachant un volume au conteneur PostgreSQL, on s'assure que les données de la base de données sont conservées et peuvent être sauvegardées ou restaurées.
 
-## Why do we need a reverse proxy?
+### Why do we need a reverse proxy?
 
 Le reverse proxy permet de centraliser la gestion des demandes clients (par exemple sur un serveur httpd) et de les rediriger vers les serveurs appropriés (sur le port 8080) en fonction de règles de routage
 
-## Why is docker-compose so important?
+### Why is docker-compose so important?
 
 Le docker compose simplifie le déploiement d'applications contenant plusieurs services Docker,
 en automatisant la création, la configuration et la liaison des conteneurs. C'est un outil essentiel pour la gestion d'applications multi-conteneurs.
 
-## Why do we put our images into an online repo?
+### Why do we put our images into an online repo?
 
 Placer des images de conteneur dans Docker Hub,
 permet de les partager, de les distribuer et de les rendre accessibles à
@@ -75,26 +74,144 @@ d'autres utilisateurs ou membres de l'équipe directement en ligne.
 
 # TP2 - Github Actions
 
-## What is GitHub Actions?
-
-estcontainers est une bibliothèque Java qui permet d'exécuter des conteneurs Docker pendant les tests. Dans cet exemple, nous utilisons le conteneur PostgreSQL pour attacher notre application lors des tests. Lorsque vous exécutez la commande "mvn clean verify", un conteneur Docker est lancé pendant l'exécution des tests, ce qui est très pratique pour effectuer des tests d'intégration.
-
 ## What are testcontainers?
 
 Testcontainers est une bibliothèque Java qui permet d'exécuter des conteneurs Docker pendant les tests. Dans cet exemple, nous utilisons le conteneur PostgreSQL pour attacher notre application lors des tests. Lorsque vous exécutez la commande "mvn clean verify", un conteneur Docker est lancé pendant l'exécution des tests, ce qui est très pratique pour effectuer des tests d'intégration.
 
-## What is the purpose of Continuous Delivery (CD) in the context of software development?
+## Document your Github Actions configurations.
 
-Continuous Delivery (CD) is a software development practice that focuses on automatically delivering code changes to production or a staging environment after they have been thoroughly tested. The goal of CD is to ensure that code can be reliably and consistently deployed to production with minimal manual intervention. It helps streamline the release process and improve software quality.
+```
+name: CI devops 2023
 
-## How do you secure environment variables in GitHub Actions?
+on:
+  push:
+    branches:
+      - develop
+      - master
 
-To secure environment variables in GitHub Actions, you can use GitHub Secrets. Secrets are encrypted variables that you can store in your GitHub repository. They are not exposed in the workflow logs, making them a secure way to store sensitive information like API keys or credentials.
+jobs:
+  test-backend:
+    runs-on: ubuntu-22.04
 
-## How do you build and push Docker images using GitHub Actions?
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2.5.0
+        # Cette étape récupère le code depuis le dépôt GitHub
 
-You can build and push Docker images in GitHub Actions by defining a job that uses a Docker action. In the job configuration, specify the Dockerfile and context for your Docker image, and provide the necessary credentials to log in to a container registry (e.g., Docker Hub). After building the image, you can use the action to push it to the container registry.
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: 17
+          distribution: 'adopt'
+        # Cette étape configure Java JDK 17 pour l'environnement de build
+
+      - name: Build and test with Maven
+        run: mvn clean verify --file backend/pom.xml
+        # Cette étape exécute la construction et les tests en utilisant Maven
+```
+
+## Document your quality gate configuration.
+
+On change la dernière étape du jobs test-backend
+```
+run: mvn -B verify sonar:sonar -Dsonar.projectKey=edwhlt_TP_devops -Dsonar.organization=edwhlt -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }} --file backend/pom.xml
+# Cette étape exécute la construction et les tests en utilisant Maven, puis envoie les résultats à SonarCloud pour l'analyse statique du code
+# on précise quel projet sonar, quelle organisation ainsi que le token stocké dans les secrets
+```
 
 # TP 3 - Ansible
 
+## Document your inventory and base commands
 
+```
+all:  # Groupe "all" contenant des variables globales et des groupes d'hôtes.
+ vars:
+   ansible_user: centos  # Utilisateur SSH pour se connecter aux hôtes du groupe "all".
+   ansible_ssh_private_key_file: ~/.ssh/id_rsa  # Clé privée SSH utilisée pour les connexions aux hôtes.
+ children:
+   prod:  # Groupe d'hôtes "prod".
+     hosts: edwin.helet.takima.cloud  # Liste des hôtes dans le groupe "prod".
+```
+
+## Document your playbook
+
+```
+- name: Launch Docker containers  # Nom du playbook, qui décrit son objectif.
+  hosts: all  # Groupe d'hôtes cible pour l'exécution de ce playbook (tous les hôtes).
+  gather_facts: false  # Désactive la collecte de faits (facts) pour accélérer l'exécution.
+
+  become: true  # Active l'utilisation de privilèges d'administration (sudo) pour les tâches.
+
+  roles:
+    - install-docker  # Inclut le rôle "install-docker" pour installer Docker sur les hôtes.
+    - create-docker-network  # Inclut le rôle "create-docker-network" pour créer un réseau Docker.
+    - launch-database  # Inclut le rôle "launch-database" pour lancer la base de données.
+    - launch-app  # Inclut le rôle "launch-app" pour lancer l'application.
+    - launch-frontend  # Inclut le rôle "launch-frontend" pour lancer le frontend de l'application.
+    - launch-proxy  # Inclut le rôle "launch-proxy" pour lancer un proxy (éventuellement inversé).
+```
+
+Ensuite toutes les tasks sont définits dans les différents roles, par exemple la task pour `install-docker`:
+
+```
+- name: Install device-mapper-persistent-data
+  # Installe le package 'device-mapper-persistent-data' en utilisant le module 'yum'.
+  yum:
+    name: device-mapper-persistent-data
+    state: latest
+  # Assure que le package est mis à jour vers la dernière version disponible (state: latest).
+
+- name: Install lvm2
+  # Installe le package 'lvm2' en utilisant le module 'yum'.
+  yum:
+    name: lvm2
+    state: latest
+  # Assure que le package 'lvm2' est mis à jour vers la dernière version disponible (state: latest).
+
+- name: Add Docker repository
+  # Ajoute le référentiel Docker en utilisant la commande 'yum-config-manager'.
+  command:
+    cmd: sudo yum-config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+  # Configure le système pour télécharger les paquets Docker depuis le référentiel officiel de Docker pour CentOS.
+
+- name: Install Docker
+  # Installe le package 'docker-ce' (Docker Community Edition) en utilisant le module 'yum'.
+  yum:
+    name: docker-ce
+    state: present
+  # Assure que le package 'docker-ce' est installé.
+
+- name: Make sure Docker is running
+  # Vérifie que le service Docker est en cours d'exécution en utilisant le module 'service'.
+  service: name=docker state=started
+  # Démarre le service Docker s'il n'est pas déjà en cours d'exécution.
+  tags: docker
+  # Associe la balise (tag) 'docker' à cette tâche pour permettre son exécution sélective en fonction des balises utilisées lors de l'exécution du playbook.
+```
+
+## Document your docker_container tasks configuration
+
+```
+- name: Launch app container
+  # Nom de la tâche : "Lancer le conteneur de l'application".
+  docker_container:
+    # Utilise le module 'docker_container' pour gérer les conteneurs Docker.
+    name: backend-devops
+    # Nom du conteneur : "backend-devops".
+    image: edwhlt/tp_devops-backend:latest
+    # Image Docker à utiliser pour le conteneur, en utilisant la dernière version "latest".
+    ports:
+      - "8080:8080"
+    # Mappage du port hôte 8080 au port du conteneur 8080.
+    networks:
+      - name: netapp
+    # Ajout du conteneur au réseau nommé "netapp".
+    state: started
+    # État souhaité du conteneur : "started" (démarré).
+    recreate: yes
+    # Recrée le conteneur si nécessaire (basé sur le nom du conteneur).
+    pull: true
+    # Télécharge la dernière version de l'image Docker si elle n'est pas déjà présente.
+  become: yes
+  # Utilise les privilèges de superutilisateur pour exécuter cette tâche.
+```
